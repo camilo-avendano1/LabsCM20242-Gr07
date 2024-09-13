@@ -1,5 +1,6 @@
 package co.edu.udea.compumovil.labs20242_gr07
 
+import android.app.DatePickerDialog
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +14,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -26,6 +30,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,6 +46,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,11 +78,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SelectView(educationStrings: Array<String>, countryStrings: Array<String>, cityStrings: Array<String>){
-    var view by remember { mutableIntStateOf(0) }
+    var view by rememberSaveable { mutableIntStateOf(0) }
     when(view){
         0 -> PersonalData(educationStrings, nextButton =  { view = 1 })
         1 -> ContactInformation(countryStrings,cityStrings, nextButton = { view = 2 })
-        else -> Debug( firstButton = {view=1} , secondButton = {view=2} )
+        else -> Debug( firstButton = {view=0} , secondButton = {view=1} )
     }
 }
 
@@ -83,24 +90,15 @@ fun SelectView(educationStrings: Array<String>, countryStrings: Array<String>, c
 @Composable
 fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
     
-    /*TODO Scrollable*/
+
+    val scrollState = rememberScrollState()
+
     var nameText by rememberSaveable { mutableStateOf("") }
     var surnameText by rememberSaveable { mutableStateOf("") }
     var mRadioButtonSelected by rememberSaveable { mutableStateOf(false) }
     var fRadioButtonSelected by rememberSaveable { mutableStateOf(false) }
 
-
-
-    var sex by remember {mutableStateOf("")}
-    if(mRadioButtonSelected){
-        sex = "Male"
-    }
-    if (fRadioButtonSelected){
-        sex = "Female"
-    }
-    else{
-        sex = "Unknown"
-    }
+    var sex by remember { mutableStateOf("") }
 
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
     var dateLong by rememberSaveable {
@@ -108,17 +106,24 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
     }
     val dateSelected = dateLong?.let {
         convertMillisToDate(it)
-    } ?: "..."
+    } ?: ""
     
     var dropDownSelected by rememberSaveable { mutableStateOf("") }
     var expandedDropDown by remember { mutableStateOf(false) }
-   
+
+    var nameError by remember { mutableStateOf(false) }
+    var surnameError by remember { mutableStateOf(false) }
+    var dateError by remember { mutableStateOf(false) }
+    var futureDateError by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 28.dp, bottom = 42.dp, start = 4.dp, end = 4.dp)
     ) {
-        Column(modifier = Modifier.padding(4.dp)) {
+        Column(modifier = Modifier
+            .padding(4.dp)
+            .verticalScroll(scrollState)) {
             Text(text = "Nombres", modifier = Modifier.padding(4.dp))
             Row {
                 TextField(
@@ -126,8 +131,16 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     onValueChange = { nameText = it },
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    isError = nameError
                 )
+            }
+            if (nameError){
+                Text("Name is required", color = MaterialTheme.colorScheme.error)
             }
             Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
             Row {
@@ -136,8 +149,16 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     onValueChange = { surnameText = it },
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done,
+                        capitalization = KeyboardCapitalization.Words
+                    ),
+                    isError = surnameError
                 )
+            }
+            if (surnameError){
+                Text("Surname is required", color = MaterialTheme.colorScheme.error)
             }
             Row {
                 Text(text = "Sexo: ", modifier = Modifier
@@ -170,7 +191,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     modifier = Modifier.padding(4.dp)
                 )
             }
-            Row {
+            Row{
                 Text(text = "Fecha de nacimiento: ",
                     modifier = Modifier
                         .padding(4.dp)
@@ -189,10 +210,17 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     .padding(4.dp)
                     .align(Alignment.CenterVertically))
             }
+            if (dateError){
+                Text("Birth date is required", color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(bottom = 8.dp))
+            } else if (futureDateError){
+                Text("Birth date is not valid", color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(bottom = 8.dp))
+            }
 
 // Spinner en Jetpack Compose usando DropdownMenu
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Nivel de escolaridad", modifier = Modifier.padding(4.dp))
+                Text(text = "Nivel de escolaridad: ", modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -208,7 +236,8 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     )
                     DropdownMenu(
                         expanded = expandedDropDown,
-                        onDismissRequest = { expandedDropDown = false }
+                        onDismissRequest = { expandedDropDown = false },
+                        modifier = Modifier.heightIn(max=200.dp)
                     ) {
                         arrayItems.forEach { item ->
                             DropdownMenuItem(
@@ -225,13 +254,27 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
         }
         Button(
             onClick = {
-                Log.d("PersonalData",
-                    "Name: $nameText, \n" +
-                            "Surname: $surnameText,\n" +
-                            "Sex: $sex, \n" +
-                            "DoB: $dateSelected, \n" +
-                            "Education degree: $dropDownSelected")
-                nextButton()
+                nameError = nameText.isEmpty()
+                surnameError = surnameText.isEmpty()
+                dateError = dateSelected.isEmpty()
+                futureDateError = dateLong!! > System.currentTimeMillis()
+                if(!nameError && !surnameError && !dateError && !futureDateError){
+                    sex = if (mRadioButtonSelected)
+                        ("Male")
+                    else if (fRadioButtonSelected)
+                        ("Female")
+                    else
+                        ("Unknown")
+
+                    Log.d("PersonalData",
+                        "Name: $nameText, \n" +
+                                "Surname: $surnameText,\n" +
+                                "Sex: $sex, \n" +
+                                "DoB: $dateSelected, \n" +
+                                "Education degree: $dropDownSelected")
+
+                    nextButton()
+                }
             },
             modifier = Modifier
                 .padding(4.dp)
@@ -261,7 +304,6 @@ fun DatePickerModal(
     onDismiss: () -> Unit
 ) {
     val datePickerState = rememberDatePickerState()
-
     DatePickerDialog(
         onDismissRequest = onDismiss,
         confirmButton = {
@@ -277,7 +319,8 @@ fun DatePickerModal(
                 Text("Cancel")
             }
         }
-    ) {
+    )
+    {
         DatePicker(state = datePickerState)
     }
 }
@@ -291,6 +334,11 @@ fun convertMillisToDate(millis: Long): String {
 @Composable
 fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, nextButton: () -> Unit) {
 
+    val scrollState = rememberScrollState()
+    val countryScroll = rememberScrollState()
+    val cityScroll = rememberScrollState()
+
+
     var phoneNum by rememberSaveable { mutableStateOf("") }
     var address by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -301,45 +349,85 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
     var countryExpanded by remember { mutableStateOf(false) }
     var cityExpanded by remember { mutableStateOf(false) }
 
+
+    var phoneNumError by remember { mutableStateOf(false) }
+    var emailError by remember { mutableStateOf(false) }
+    var countryError by remember { mutableStateOf(false) }
+    var emailValidError by remember { mutableStateOf(false) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 32.dp, bottom = 42.dp, start = 4.dp, end = 4.dp)
     ) {
-        Column{
+        Column(modifier = Modifier
+            .padding(4.dp)
+            .verticalScroll(scrollState)){
             Row {
-                Text(text = "Telefono: ", modifier = Modifier.padding(4.dp))
+                Text(text = "Telefono: ",
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .align(Alignment.CenterVertically)
+                )
                 TextField(
                     value = phoneNum,
                     onValueChange = { phoneNum = it },
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Next
+                    )
                 )
             }
+            if (phoneNumError){
+                Text("Phone number is required", color = MaterialTheme.colorScheme.error)
+            }
             Row {
-                Text(text = "Direccion: ", modifier = Modifier.padding(4.dp))
+                Text(text = "Direccion: ",
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .align(Alignment.CenterVertically)
+                )
                 TextField(
                     value = address,
                     onValueChange = { address = it },
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    )
                 )
             }
             Row {
-                Text(text = "Email: ", modifier = Modifier.padding(4.dp))
+                Text(text = "Email: ",
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .align(Alignment.CenterVertically)
+                )
                 TextField(
                     value = email,
                     onValueChange = { email = it },
                     modifier = Modifier
                         .padding(4.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done,
+                        keyboardType = KeyboardType.Email
+                    )
                 )
             }
-            Row(modifier = Modifier.wrapContentSize()) {
-                Text(text = "Pais", modifier = Modifier.padding(4.dp))
+            if (emailError){
+                Text("Email is required", color = MaterialTheme.colorScheme.error)
+            } else if(emailValidError){
+                Text("Email is invalid", color = MaterialTheme.colorScheme.error)
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)) {
+                Text(text = "Pais: ", modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -355,7 +443,9 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                     )
                     DropdownMenu(
                         expanded = countryExpanded,
-                        onDismissRequest = { countryExpanded = false }
+                        onDismissRequest = { countryExpanded = false },
+                        modifier = Modifier.heightIn(max=200.dp),
+                        scrollState = countryScroll
                     ) {
                         countryArray.forEach { item ->
                             DropdownMenuItem(
@@ -369,8 +459,13 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                     }
                 }
             }
-            Row(modifier = Modifier.wrapContentSize()) {
-                Text(text = "Ciudad", modifier = Modifier.padding(4.dp))
+            if (countryError){
+                Text("Country is required", color = MaterialTheme.colorScheme.error)
+            }
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp)) {
+                Text(text = "Ciudad: ", modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -386,7 +481,9 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                     )
                     DropdownMenu(
                         expanded = cityExpanded,
-                        onDismissRequest = { cityExpanded = false }
+                        onDismissRequest = { cityExpanded = false },
+                        modifier = Modifier.heightIn(max=200.dp),
+                        scrollState = cityScroll
                     ) {
                         cityArray.forEach { item ->
                             DropdownMenuItem(
@@ -403,13 +500,20 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
         }
         Button(
             onClick = {
-                Log.d("Contact Information",
-                    "Phone: $phoneNum, \n" +
-                            "Address: $address,\n" +
-                            "Email: $email, \n" +
-                            "Country: $countrySelected, \n" +
-                            "City: $citySelected")
-                nextButton()
+                phoneNumError = phoneNum.isEmpty()
+                emailValidError = !isValidEmail(email)
+                emailError = email.isEmpty()
+                countryError = countrySelected.isEmpty()
+                if (!phoneNumError && !emailError && !countryError && !emailValidError){
+                    Log.d("Contact Information",
+                        "Phone: $phoneNum, \n" +
+                                "Address: $address,\n" +
+                                "Email: $email, \n" +
+                                "Country: $countrySelected, \n" +
+                                "City: $citySelected")
+
+                    nextButton()
+                }
             },
             modifier = Modifier
                 .padding(4.dp)
@@ -419,6 +523,12 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
         }
     }
 }
+
+fun isValidEmail(email: String): Boolean {
+    val emailRegex = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex()
+    return email.matches(emailRegex)
+}
+
 
 @Composable
 fun Debug(firstButton: () -> Unit, secondButton: ()-> Unit){
