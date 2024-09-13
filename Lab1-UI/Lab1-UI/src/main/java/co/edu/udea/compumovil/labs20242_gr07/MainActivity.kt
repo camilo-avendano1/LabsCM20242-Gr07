@@ -2,10 +2,13 @@ package co.edu.udea.compumovil.labs20242_gr07
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -33,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,10 +51,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val educationStrings : Array<String> = resources.getStringArray(R.array.escolaridades)
+        
+        /*val spinner: Spinner = findViewById(R.id.educationSpinner)
+        ArrayAdapter.createFromResource(this, R.array.escolaridades, android.R.layout.simple_spinner_item).also {
+                adapter ->
+            // Specify the layout to use when the list of choices appears.
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner.
+            spinner.adapter = adapter
+        }*/
+        
+        enableEdgeToEdge()
         setContent {
             Labs20242Gr07Theme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    PersonalData()
+                    PersonalData(educationStrings)
                 }
             }
         }
@@ -59,27 +76,24 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun PersonalData() {
-
+fun PersonalData(arrayItems: Array<String>) {
+    
     /*TODO Scrollable*/
-    var nameText by remember { mutableStateOf("") }
-
-    var mRadioButtonSelected by remember { mutableStateOf(false) }
-    var fRadioButtonSelected by remember { mutableStateOf(false) }
-
-    var showDatePicker by remember { mutableStateOf(false) }
-    var dateLong by remember {
+    var nameText by rememberSaveable { mutableStateOf("") }
+    var surnameText by rememberSaveable { mutableStateOf("") }
+    var mRadioButtonSelected by rememberSaveable { mutableStateOf(false) }
+    var fRadioButtonSelected by rememberSaveable { mutableStateOf(false) }
+    var showDatePicker by rememberSaveable { mutableStateOf(false) }
+    var dateLong by rememberSaveable {
         mutableStateOf<Long?>(null)
     }
     var dateSelected = dateLong?.let {
         convertMillisToDate(it)
     } ?: "..."
-
-    val educationStrings = arrayOf<String>(R.array.escolaridades.toString())
-
-    var dropDownSelected by remember { mutableStateOf("") }
+    
+    var dropDownSelected by rememberSaveable { mutableStateOf("") }
     var expandedDropDown by remember { mutableStateOf(false) }
-
+   
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -99,8 +113,8 @@ fun PersonalData() {
             Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
             Row {
                 TextField(
-                    value = nameText,
-                    onValueChange = { nameText = it },
+                    value = surnameText,
+                    onValueChange = { surnameText = it },
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
@@ -138,7 +152,7 @@ fun PersonalData() {
                 )
             }
             Row {
-                Text(text = "Fecha de nacimiento: ", 
+                Text(text = "Fecha de nacimiento: ",
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
@@ -152,37 +166,43 @@ fun PersonalData() {
                     Icon(imageVector = Icons.Filled.DateRange,
                         contentDescription = "Select a date")
                 }
-                Text(text = dateSelected, modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically))
+                Text(text = dateSelected, modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.CenterVertically))
             }
-            Text(text = "Nivel de escolaridad", modifier = Modifier.padding(4.dp))                        
-
-            // Spinner
-            /* TODO
-            Box (modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(Alignment.TopStart)
-                .padding(4.dp)){
-                DropdownMenu(
-                    expanded = expandedDropDown,
-                    onDismissRequest = { expandedDropDown = false },
-                    modifier = Modifier.padding(4.dp)
+            
+// Spinner en Jetpack Compose usando DropdownMenu
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(text = "Nivel de escolaridad", modifier = Modifier.padding(4.dp))
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentSize(Alignment.TopStart)
                 ) {
-                    DropdownMenuItem(
-                        text = { Text("Hola") },
-                        onClick = { dropDownSelected = "Hola" },
-                        modifier = Modifier.padding(4.dp)
+                    Text(
+                        text = dropDownSelected.ifEmpty { "Seleccione una opción" },
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.CenterStart)
+                            .clickable { expandedDropDown = !expandedDropDown }
                     )
-                    repeat(educationStrings.size) {
-                        DropdownMenuItem(
-                            text = { Text(educationStrings[it]) },
-                            onClick = { dropDownSelected = educationStrings[it] },
-                            modifier = Modifier.padding(4.dp)
-                        )
-
+                    DropdownMenu(
+                        expanded = expandedDropDown,
+                        onDismissRequest = { expandedDropDown = false }
+                    ) {
+                        arrayItems.forEach { item ->
+                            DropdownMenuItem(
+                                text = { Text(text = item) },
+                                onClick = {
+                                    dropDownSelected = item
+                                    expandedDropDown = false
+                                }
+                            )
+                        }
                     }
                 }
             }
-             */
         }
         Button(
             onClick = { /*TODO*/ },
@@ -205,6 +225,7 @@ fun PersonalData() {
     }
 
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -247,7 +268,8 @@ fun convertMillisToDate(millis: Long): String {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+
     Labs20242Gr07Theme {
-        PersonalData()
+
     }
 }
