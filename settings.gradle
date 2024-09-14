@@ -1,0 +1,4 @@
+project(':build.gradle.kts').projectDir = new File(rootDir, '/Lab1-UI/build.gradle.kts')
+include ':build.gradle.kts'
+project(':build.gradle.kts').projectDir = new File(rootDir, '/Lab1-UI/build.gradle.kts')
+include ':build.gradle.kts'

@@ -37,6 +37,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,25 +65,48 @@ class MainActivity : ComponentActivity() {
 
         val educationStrings : Array<String> = resources.getStringArray(R.array.educationDegrees)
         val resources = resources
-        val countryStrings : Array<String> = arrayOf("A","B","C")
-        val cityStrings : Array<String> = arrayOf("a","b","c")
+
+
+        val countryApi = CountryApi
 
         setContent {
             Labs20242Gr07Theme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    SelectView(resources = resources, educationStrings = educationStrings, countryStrings = countryStrings, cityStrings = cityStrings)
+                    countryApi.getCountries()
+                    val countryStrings = getCountriesName(countryApi.getCountries())
+                    SelectView(resources = resources, educationStrings = educationStrings, countryStrings = countryStrings)
                 }
             }
         }
     }
 }
 
+
+fun getCountriesName(countries: List<Country>): Array<String>{
+    var aux:Array<String> = emptyArray()
+    for (country in countries){
+        aux += country.name
+    }
+    aux.sort()
+    return aux
+}
+
+fun getCitiesName(cities: List<City>): Array<String>{
+    var aux:Array<String> = emptyArray()
+    for (city in cities){
+        aux += city.name
+    }
+    aux.sort()
+    return aux
+}
+
+
 @Composable
-fun SelectView(resources: Resources, educationStrings: Array<String>, countryStrings: Array<String>, cityStrings: Array<String>){
+fun SelectView(resources: Resources, educationStrings: Array<String>, countryStrings: Array<String>){
     var view by rememberSaveable { mutableIntStateOf(0) }
     when(view){
         0 -> PersonalData(resources,educationStrings, nextButton =  { view = 1 })
-        1 -> ContactInformation(resources,countryStrings,cityStrings, nextButton = { view = 2 })
+        1 -> ContactInformation(resources,countryStrings, nextButton = { view = 2 })
         else -> Debug( firstButton = {view=0} , secondButton = {view=1} )
     }
 }
@@ -128,7 +152,9 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
             if (isLandscape) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     // Campo Nombre
-                    Column(modifier = Modifier.weight(1f).padding(4.dp)) {
+                    Column(modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp)) {
                         Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
                         TextField(
                             value = nameText,
@@ -146,7 +172,9 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     }
 
                     // Campo Apellido
-                    Column(modifier = Modifier.weight(1f).padding(4.dp)) {
+                    Column(modifier = Modifier
+                        .weight(1f)
+                        .padding(4.dp)) {
                         Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
                         TextField(
                             value = surnameText,
@@ -296,7 +324,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                 nameError = nameText.isEmpty()
                 surnameError = surnameText.isEmpty()
                 dateError = dateSelected.isEmpty()
-                futureDateError = dateLong!! > System.currentTimeMillis()
+                futureDateError = if(dateError){ true } else {dateLong!! > System.currentTimeMillis()}
                 if(!nameError && !surnameError && !dateError && !futureDateError){
                     sex = if (mRadioButtonSelected)
                         (resources.getString(R.string.male))
@@ -374,7 +402,9 @@ fun convertMillisToDate(millis: Long): String {
 
 
 @Composable
-fun ContactInformation(resources: Resources, countryArray: Array<String>, cityArray: Array<String>, nextButton: () -> Unit) {
+fun ContactInformation(resources: Resources, countryArray: Array<String>, nextButton: () -> Unit) {
+
+    var cityStrings by remember {mutableStateOf(arrayOf<String>())}
 
     val scrollState = rememberScrollState()
     val countryScroll = rememberScrollState()
@@ -504,6 +534,13 @@ fun ContactInformation(resources: Resources, countryArray: Array<String>, cityAr
             if (countryError){
                 Text(resources.getString(R.string.countryError), color = MaterialTheme.colorScheme.error)
             }
+            if (countrySelected.isNotEmpty()){
+                val countryApi = CountryApi
+                var selCountry = countryApi.getCca2(country = countrySelected)
+                Log.d("pedro", selCountry.cca2)
+                val cityApi = CityApi
+                cityStrings = getCitiesName(cityApi.getCities(cca2 = selCountry.cca2))
+            }
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)) {
@@ -527,7 +564,7 @@ fun ContactInformation(resources: Resources, countryArray: Array<String>, cityAr
                         modifier = Modifier.heightIn(max=200.dp),
                         scrollState = cityScroll
                     ) {
-                        cityArray.forEach { item ->
+                        cityStrings.forEach { item ->
                             DropdownMenuItem(
                                 text = { Text(text = item) },
                                 onClick = {

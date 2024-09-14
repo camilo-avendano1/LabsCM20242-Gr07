@@ -9,11 +9,19 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b20716c0-06a9-4541-bf2f-05eef08446be" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
+    <list default="true" id="b20716c0-06a9-4541-bf2f-05eef08446be" name="Changes" comment="Pink logo">
+      <change afterPath="$PROJECT_DIR$/.gradle/config.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/java/co/edu/udea/compumovil/labs20242_gr07/CityApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/java/co/edu/udea/compumovil/labs20242_gr07/CountryApi.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/java/co/edu/udea/compumovil/labs20242_gr07/CountryApiService.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/java/co/edu/udea/compumovil/labs20242_gr07/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/java/co/edu/udea/compumovil/labs20242_gr07/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/res/values-en/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/res/values-en/strings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/Lab1-UI/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Lab1-UI/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Lab1-UI/gradle/libs.versions.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,21 +78,33 @@
       </state>
     </system>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+        <option value="Kotlin File" />
+        <option value="Kotlin Class" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
-  "lastFilter": {
-    "state": "OPEN",
-    "assignee": "DaniloTovar"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;DaniloTovar&quot;
   }
-}]]></component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/camilo-avendano1/LabsCM20242-Gr07.git",
-    "accountId": "d6334567-ded7-4127-a6ae-a8f3028beae2"
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/camilo-avendano1/LabsCM20242-Gr07.git&quot;,
+    &quot;accountId&quot;: &quot;d6334567-ded7-4127-a6ae-a8f3028beae2&quot;
   }
-}]]></component>
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
 }</component>
@@ -99,6 +119,8 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Android App.Labs20242-Gr07.Lab1-UI.executor": "Run",
+    "Gradle.Load Gradle Dependencies.executor": "Run",
+    "ResourceManagerPrefKey.ResourceType": "DRAWABLE",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
@@ -108,11 +130,11 @@
     "ignore.virus.scanning.warn.message": "true",
     "jdk.selected.JAVA_MODULE": "Android API 34, extension level 7 Platform",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/danil/AndroidStudioProjects/lab1/Lab1-UI/Lab1-UI",
-    "project.structure.last.edited": "Modules",
+    "last_opened_file_path": "C:/Users/danil/AndroidStudioProjects/lab1/Lab1-UI/Lab1-UI/build.gradle.kts",
+    "project.structure.last.edited": "Dependencies",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
     "kotlin-gradle-user-dirs": [
@@ -120,6 +142,11 @@
     ]
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="co.edu.udea.compumovil.labs20242_gr07" />
+    </key>
+  </component>
   <component name="RunManager" selected="Android App.Labs20242-Gr07.Lab1-UI">
     <configuration name="Labs20242-Gr07.Lab1-UI" type="AndroidRunConfigurationType" factoryName="Android App">
       <module name="Labs20242-Gr07.Lab1-UI.main" />
@@ -261,6 +288,66 @@
       <option name="presentableId" value="Default" />
       <updated>1725582089616</updated>
     </task>
+    <task id="LOCAL-00001" summary="Created first form - PersonalData">
+      <option name="closed" value="true" />
+      <created>1726029043423</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1726029043423</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Created second form - ContactInformation">
+      <option name="closed" value="true" />
+      <created>1726205630040</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1726205630040</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Adjusted some components and added obligatory data">
+      <option name="closed" value="true" />
+      <created>1726216685673</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1726216685673</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Added all language strings">
+      <option name="closed" value="true" />
+      <created>1726286307279</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1726286307279</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Pink logo">
+      <option name="closed" value="true" />
+      <created>1726287122096</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1726287122096</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Created first form - PersonalData" />
+    <MESSAGE value="Created second form - ContactInformation" />
+    <MESSAGE value="Adjusted some components and added obligatory data" />
+    <MESSAGE value="Added all language strings" />
+    <MESSAGE value="Pink logo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Pink logo" />
   </component>
 </project>

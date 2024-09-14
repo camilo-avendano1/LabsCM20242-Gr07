@@ -9,17 +9,17 @@
         <item>Doctorate</item>
         <item>Other</item>
     </string-array>
-    <string name="selectOption">Select an option (↓)</string>
+    <string name="selectOption">Select an option ↓</string>
     <string name="next">Next</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
 
-    <string name="name">Name: </string>
-    <string name="surname">Surname: </string>
+    <string name="name">Name*: </string>
+    <string name="surname">Surname*: </string>
     <string name="sex">Sex: </string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="dob">Date of birth: </string>
+    <string name="dob">Date of birth*: </string>
     <string name="selectDate">Select a Date</string>
     <string name="education">Education degree: </string>
     <string name="sexNotGiven">Unknown</string>
@@ -29,10 +29,10 @@
     <string name="dateError">Date of birth is required!</string>
     <string name="dateValidError">Date of birth is invalid!</string>
 
-    <string name="phone">Phone: </string>
+    <string name="phone">Phone*: </string>
     <string name="address">Address: </string>
-    <string name="email">Email: </string>
-    <string name="country">Country: </string>
+    <string name="email">Email*: </string>
+    <string name="country">Country*: </string>
     <string name="city">City: </string>
 
     <string name="phoneError">Phone is required!</string>

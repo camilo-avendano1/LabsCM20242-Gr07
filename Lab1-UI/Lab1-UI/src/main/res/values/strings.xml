@@ -9,17 +9,17 @@
         <item>Otro</item>
     </string-array>
 
-    <string name="selectOption">Selecciona una opción (↓)</string>
+    <string name="selectOption">Selecciona una opción ↓</string>
     <string name="next">Siguiente</string>
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
 
-    <string name="name">Nombre: </string>
-    <string name="surname">Apellido: </string>
+    <string name="name">Nombre*: </string>
+    <string name="surname">Apellido*: </string>
     <string name="sex">Sexo: </string>
     <string name="male">Masculino</string>
     <string name="female">Femenino</string>
-    <string name="dob">Fecha de nacimiento: </string>
+    <string name="dob">Fecha de nacimiento*: </string>
     <string name="selectDate">Selecciona una fecha</string>
     <string name="education">Nivel de escolaridad: </string>
     <string name="sexNotGiven">Desconcido</string>
@@ -29,10 +29,10 @@
     <string name="dateError">Fecha de nacimiento es requerida!</string>
     <string name="dateValidError">Fecha de nacimiento invalida!</string>
 
-    <string name="phone">Telefono: </string>
+    <string name="phone">Telefono*: </string>
     <string name="address">Dirección: </string>
-    <string name="email">Email: </string>
-    <string name="country">Pais: </string>
+    <string name="email">Email*: </string>
+    <string name="country">Pais*: </string>
     <string name="city">Ciudad: </string>
 
     <string name="phoneError">Telefono es requerido</string>
