@@ -46,6 +46,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -55,6 +56,7 @@ import co.edu.udea.compumovil.labs20242_gr07.ui.theme.Labs20242Gr07Theme
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,10 +88,12 @@ fun SelectView(educationStrings: Array<String>, countryStrings: Array<String>, c
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
-    
+    val configuration = LocalConfiguration.current // Detectar la orientación
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val scrollState = rememberScrollState()
 
@@ -101,13 +105,9 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
     var sex by remember { mutableStateOf("") }
 
     var showDatePicker by rememberSaveable { mutableStateOf(false) }
-    var dateLong by rememberSaveable {
-        mutableStateOf<Long?>(null)
-    }
-    val dateSelected = dateLong?.let {
-        convertMillisToDate(it)
-    } ?: ""
-    
+    var dateLong by rememberSaveable { mutableStateOf<Long?>(null) }
+    val dateSelected = dateLong?.let { convertMillisToDate(it) } ?: ""
+
     var dropDownSelected by rememberSaveable { mutableStateOf("") }
     var expandedDropDown by remember { mutableStateOf(false) }
 
@@ -121,11 +121,53 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
             .fillMaxSize()
             .padding(top = 28.dp, bottom = 42.dp, start = 4.dp, end = 4.dp)
     ) {
-        Column(modifier = Modifier
-            .padding(4.dp)
-            .verticalScroll(scrollState)) {
-            Text(text = "Nombres", modifier = Modifier.padding(4.dp))
-            Row {
+        Column(
+            modifier = Modifier
+                .padding(4.dp)
+                .verticalScroll(scrollState)
+        ) {
+            // Campos de Nombre y Apellido
+            if (isLandscape) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    // Campo Nombre
+                    Column(modifier = Modifier.weight(1f).padding(4.dp)) {
+                        Text(text = "Nombres", modifier = Modifier.padding(4.dp))
+                        TextField(
+                            value = nameText,
+                            onValueChange = { nameText = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Next,
+                                capitalization = KeyboardCapitalization.Words
+                            ),
+                            isError = nameError
+                        )
+                        if (nameError) {
+                            Text("Name is required", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
+
+                    // Campo Apellido
+                    Column(modifier = Modifier.weight(1f).padding(4.dp)) {
+                        Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
+                        TextField(
+                            value = surnameText,
+                            onValueChange = { surnameText = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            keyboardOptions = KeyboardOptions.Default.copy(
+                                imeAction = ImeAction.Done,
+                                capitalization = KeyboardCapitalization.Words
+                            ),
+                            isError = surnameError
+                        )
+                        if (surnameError) {
+                            Text("Surname is required", color = MaterialTheme.colorScheme.error)
+                        }
+                    }
+                }
+            } else {
+                // Vertical (uno debajo del otro)
+                Text(text = "Nombres", modifier = Modifier.padding(4.dp))
                 TextField(
                     value = nameText,
                     onValueChange = { nameText = it },
@@ -138,12 +180,11 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     ),
                     isError = nameError
                 )
-            }
-            if (nameError){
-                Text("Name is required", color = MaterialTheme.colorScheme.error)
-            }
-            Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
-            Row {
+                if (nameError) {
+                    Text("Name is required", color = MaterialTheme.colorScheme.error)
+                }
+
+                Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
                 TextField(
                     value = surnameText,
                     onValueChange = { surnameText = it },
@@ -156,10 +197,12 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     ),
                     isError = surnameError
                 )
+                if (surnameError) {
+                    Text("Surname is required", color = MaterialTheme.colorScheme.error)
+                }
             }
-            if (surnameError){
-                Text("Surname is required", color = MaterialTheme.colorScheme.error)
-            }
+
+            // Campos adicionales como Sexo, Fecha de Nacimiento, etc.
             Row {
                 Text(text = "Sexo: ", modifier = Modifier
                     .padding(4.dp, end = 8.dp)
@@ -191,34 +234,31 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     modifier = Modifier.padding(4.dp)
                 )
             }
-            Row{
+
+            Row {
                 Text(text = "Fecha de nacimiento: ",
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
                 )
                 IconButton(
-                    onClick = {
-                        showDatePicker = true
-                    },
+                    onClick = { showDatePicker = true },
                     modifier = Modifier.padding(4.dp)
                 ) {
-                    Icon(imageVector = Icons.Filled.DateRange,
-                        contentDescription = "Select a date")
+                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Select a date")
                 }
                 Text(text = dateSelected, modifier = Modifier
                     .padding(4.dp)
                     .align(Alignment.CenterVertically))
             }
-            if (dateError){
-                Text("Birth date is required", color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(bottom = 8.dp))
-            } else if (futureDateError){
-                Text("Birth date is not valid", color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(bottom = 8.dp))
+
+            if (dateError) {
+                Text("Birth date is required", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
+            } else if (futureDateError) {
+                Text("Birth date is not valid", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
             }
 
-// Spinner en Jetpack Compose usando DropdownMenu
+            // Spinner en Jetpack Compose usando DropdownMenu
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Nivel de escolaridad: ", modifier = Modifier.padding(4.dp))
                 Box(
@@ -237,7 +277,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     DropdownMenu(
                         expanded = expandedDropDown,
                         onDismissRequest = { expandedDropDown = false },
-                        modifier = Modifier.heightIn(max=200.dp)
+                        modifier = Modifier.heightIn(max = 200.dp)
                     ) {
                         arrayItems.forEach { item ->
                             DropdownMenuItem(
@@ -252,26 +292,24 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                 }
             }
         }
+
         Button(
             onClick = {
                 nameError = nameText.isEmpty()
                 surnameError = surnameText.isEmpty()
                 dateError = dateSelected.isEmpty()
                 futureDateError = dateLong!! > System.currentTimeMillis()
-                if(!nameError && !surnameError && !dateError && !futureDateError){
-                    sex = if (mRadioButtonSelected)
-                        ("Male")
-                    else if (fRadioButtonSelected)
-                        ("Female")
-                    else
-                        ("Unknown")
+
+                if (!nameError && !surnameError && !dateError && !futureDateError) {
+                    sex = if (mRadioButtonSelected) "Male" else if (fRadioButtonSelected) "Female" else "Unknown"
 
                     Log.d("PersonalData",
                         "Name: $nameText, \n" +
                                 "Surname: $surnameText,\n" +
                                 "Sex: $sex, \n" +
                                 "DoB: $dateSelected, \n" +
-                                "Education degree: $dropDownSelected")
+                                "Education degree: $dropDownSelected"
+                    )
 
                     nextButton()
                 }
@@ -293,7 +331,6 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
             onDismiss = { showDatePicker = false }
         )
     }
-
 }
 
 
@@ -330,6 +367,7 @@ fun convertMillisToDate(millis: Long): String {
     formatter.timeZone = TimeZone.getTimeZone("UTC")
     return formatter.format((millis))
 }
+
 
 @Composable
 fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, nextButton: () -> Unit) {
