@@ -1,13 +1,12 @@
 package co.edu.udea.compumovil.labs20242_gr07
 
-import android.app.DatePickerDialog
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -63,15 +62,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val educationStrings : Array<String> = resources.getStringArray(R.array.escolaridades)
-
+        val educationStrings : Array<String> = resources.getStringArray(R.array.educationDegrees)
+        val resources = resources
         val countryStrings : Array<String> = arrayOf("A","B","C")
         val cityStrings : Array<String> = arrayOf("a","b","c")
 
         setContent {
             Labs20242Gr07Theme {
                 Surface(modifier = Modifier.fillMaxSize()) {
-                    SelectView(educationStrings = educationStrings, countryStrings = countryStrings, cityStrings = cityStrings)
+                    SelectView(resources = resources, educationStrings = educationStrings, countryStrings = countryStrings, cityStrings = cityStrings)
                 }
             }
         }
@@ -79,19 +78,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun SelectView(educationStrings: Array<String>, countryStrings: Array<String>, cityStrings: Array<String>){
+fun SelectView(resources: Resources, educationStrings: Array<String>, countryStrings: Array<String>, cityStrings: Array<String>){
     var view by rememberSaveable { mutableIntStateOf(0) }
     when(view){
-        0 -> PersonalData(educationStrings, nextButton =  { view = 1 })
-        1 -> ContactInformation(countryStrings,cityStrings, nextButton = { view = 2 })
+        0 -> PersonalData(resources,educationStrings, nextButton =  { view = 1 })
+        1 -> ContactInformation(resources,countryStrings,cityStrings, nextButton = { view = 2 })
         else -> Debug( firstButton = {view=0} , secondButton = {view=1} )
     }
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
+fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: () -> Unit) {
     val configuration = LocalConfiguration.current // Detectar la orientación
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -131,7 +129,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     // Campo Nombre
                     Column(modifier = Modifier.weight(1f).padding(4.dp)) {
-                        Text(text = "Nombres", modifier = Modifier.padding(4.dp))
+                        Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
                         TextField(
                             value = nameText,
                             onValueChange = { nameText = it },
@@ -143,13 +141,13 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                             isError = nameError
                         )
                         if (nameError) {
-                            Text("Name is required", color = MaterialTheme.colorScheme.error)
+                            Text(resources.getString(R.string.nameError), color = MaterialTheme.colorScheme.error)
                         }
                     }
 
                     // Campo Apellido
                     Column(modifier = Modifier.weight(1f).padding(4.dp)) {
-                        Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
+                        Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
                         TextField(
                             value = surnameText,
                             onValueChange = { surnameText = it },
@@ -161,13 +159,13 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                             isError = surnameError
                         )
                         if (surnameError) {
-                            Text("Surname is required", color = MaterialTheme.colorScheme.error)
+                            Text(resources.getString(R.string.surnameError), color = MaterialTheme.colorScheme.error)
                         }
                     }
                 }
             } else {
                 // Vertical (uno debajo del otro)
-                Text(text = "Nombres", modifier = Modifier.padding(4.dp))
+                Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
                 TextField(
                     value = nameText,
                     onValueChange = { nameText = it },
@@ -181,10 +179,10 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     isError = nameError
                 )
                 if (nameError) {
-                    Text("Name is required", color = MaterialTheme.colorScheme.error)
+                    Text(resources.getString(R.string.nameError), color = MaterialTheme.colorScheme.error)
                 }
 
-                Text(text = "Apellidos", modifier = Modifier.padding(4.dp))
+                Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
                 TextField(
                     value = surnameText,
                     onValueChange = { surnameText = it },
@@ -198,17 +196,17 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     isError = surnameError
                 )
                 if (surnameError) {
-                    Text("Surname is required", color = MaterialTheme.colorScheme.error)
+                    Text(resources.getString(R.string.surnameError), color = MaterialTheme.colorScheme.error)
                 }
             }
 
             // Campos adicionales como Sexo, Fecha de Nacimiento, etc.
             Row {
-                Text(text = "Sexo: ", modifier = Modifier
+                Text(text = resources.getString(R.string.sex), modifier = Modifier
                     .padding(4.dp, end = 8.dp)
                     .align(Alignment.CenterVertically))
                 Text(
-                    text = "Masculino",
+                    text = resources.getString(R.string.male),
                     modifier = Modifier
                         .padding(4.dp, end = 1.dp)
                         .align(Alignment.CenterVertically)
@@ -221,7 +219,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     modifier = Modifier.padding(4.dp)
                 )
                 Text(
-                    text = "Femenino",
+                    text = resources.getString(R.string.female),
                     modifier = Modifier
                         .padding(4.dp, end = 1.dp)
                         .align(Alignment.CenterVertically)
@@ -236,7 +234,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
             }
 
             Row {
-                Text(text = "Fecha de nacimiento: ",
+                Text(text = resources.getString(R.string.dob),
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
@@ -245,7 +243,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                     onClick = { showDatePicker = true },
                     modifier = Modifier.padding(4.dp)
                 ) {
-                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "Select a date")
+                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = resources.getString(R.string.selectDate))
                 }
                 Text(text = dateSelected, modifier = Modifier
                     .padding(4.dp)
@@ -253,21 +251,21 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
             }
 
             if (dateError) {
-                Text("Birth date is required", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
+                Text(resources.getString(R.string.dateError), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
             } else if (futureDateError) {
-                Text("Birth date is not valid", color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
+                Text(resources.getString(R.string.dateValidError), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
             }
 
             // Spinner en Jetpack Compose usando DropdownMenu
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = "Nivel de escolaridad: ", modifier = Modifier.padding(4.dp))
+                Text(text = resources.getString(R.string.education), modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize(Alignment.TopStart)
                 ) {
                     Text(
-                        text = dropDownSelected.ifEmpty { "Seleccione una opción" },
+                        text = dropDownSelected.ifEmpty { resources.getString(R.string.selectOption) },
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth()
@@ -299,9 +297,13 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                 surnameError = surnameText.isEmpty()
                 dateError = dateSelected.isEmpty()
                 futureDateError = dateLong!! > System.currentTimeMillis()
-
-                if (!nameError && !surnameError && !dateError && !futureDateError) {
-                    sex = if (mRadioButtonSelected) "Male" else if (fRadioButtonSelected) "Female" else "Unknown"
+                if(!nameError && !surnameError && !dateError && !futureDateError){
+                    sex = if (mRadioButtonSelected)
+                        (resources.getString(R.string.male))
+                    else if (fRadioButtonSelected)
+                        (resources.getString(R.string.female))
+                    else
+                        (resources.getString(R.string.sexNotGiven))
 
                     Log.d("PersonalData",
                         "Name: $nameText, \n" +
@@ -318,12 +320,13 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
                 .padding(4.dp)
                 .align(Alignment.BottomEnd)
         ) {
-            Text(text = "Siguiente")
+            Text(text = resources.getString(R.string.next))
         }
     }
 
     if (showDatePicker) {
         DatePickerModal(
+            resources = resources,
             onDateSelected = {
                 dateLong = it
                 showDatePicker = false
@@ -337,6 +340,7 @@ fun PersonalData(arrayItems: Array<String>, nextButton: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerModal(
+    resources: Resources,
     onDateSelected: (Long?) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -348,12 +352,12 @@ fun DatePickerModal(
                 onDateSelected(datePickerState.selectedDateMillis)
                 onDismiss()
             }) {
-                Text("OK")
+                Text(resources.getString(R.string.ok))
             }
         },
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(resources.getString(R.string.cancel))
             }
         }
     )
@@ -370,7 +374,7 @@ fun convertMillisToDate(millis: Long): String {
 
 
 @Composable
-fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, nextButton: () -> Unit) {
+fun ContactInformation(resources: Resources, countryArray: Array<String>, cityArray: Array<String>, nextButton: () -> Unit) {
 
     val scrollState = rememberScrollState()
     val countryScroll = rememberScrollState()
@@ -402,7 +406,7 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
             .padding(4.dp)
             .verticalScroll(scrollState)){
             Row {
-                Text(text = "Telefono: ",
+                Text(text = resources.getString(R.string.phone),
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
@@ -420,10 +424,10 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                 )
             }
             if (phoneNumError){
-                Text("Phone number is required", color = MaterialTheme.colorScheme.error)
+                Text(resources.getString(R.string.phoneError), color = MaterialTheme.colorScheme.error)
             }
             Row {
-                Text(text = "Direccion: ",
+                Text(text = resources.getString(R.string.address),
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
@@ -440,7 +444,7 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                 )
             }
             Row {
-                Text(text = "Email: ",
+                Text(text = resources.getString(R.string.email),
                     modifier = Modifier
                         .padding(4.dp)
                         .align(Alignment.CenterVertically)
@@ -458,21 +462,21 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                 )
             }
             if (emailError){
-                Text("Email is required", color = MaterialTheme.colorScheme.error)
+                Text(resources.getString(R.string.emailError), color = MaterialTheme.colorScheme.error)
             } else if(emailValidError){
-                Text("Email is invalid", color = MaterialTheme.colorScheme.error)
+                Text(resources.getString(R.string.emailValidError), color = MaterialTheme.colorScheme.error)
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)) {
-                Text(text = "Pais: ", modifier = Modifier.padding(4.dp))
+                Text(text = resources.getString(R.string.country), modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize(Alignment.Center)
                 ) {
                     Text(
-                        text = countrySelected.ifEmpty { "Seleccione una opción" },
+                        text = countrySelected.ifEmpty { resources.getString(R.string.selectOption) },
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth()
@@ -498,19 +502,19 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                 }
             }
             if (countryError){
-                Text("Country is required", color = MaterialTheme.colorScheme.error)
+                Text(resources.getString(R.string.countryError), color = MaterialTheme.colorScheme.error)
             }
             Row(modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 4.dp)) {
-                Text(text = "Ciudad: ", modifier = Modifier.padding(4.dp))
+                Text(text = resources.getString(R.string.city), modifier = Modifier.padding(4.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .wrapContentSize(Alignment.Center)
                 ) {
                     Text(
-                        text = citySelected.ifEmpty { "Seleccione una opción" },
+                        text = citySelected.ifEmpty { resources.getString(R.string.selectOption) },
                         modifier = Modifier
                             .padding(4.dp)
                             .fillMaxWidth()
@@ -557,7 +561,7 @@ fun ContactInformation(countryArray: Array<String>, cityArray: Array<String>, ne
                 .padding(4.dp)
                 .align(Alignment.BottomEnd)
         ) {
-            Text(text = "Siguiente")
+            Text(text = resources.getString(R.string.next))
         }
     }
 }

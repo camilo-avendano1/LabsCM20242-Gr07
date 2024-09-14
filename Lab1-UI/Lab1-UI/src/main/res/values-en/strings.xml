@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Labs20242-Gr07</string>
-    <string-array name="escolaridades">
+    <string-array name="educationDegrees">
         <item>Primary School</item>
         <item>High School</item>
         <item>University</item>
@@ -9,4 +9,34 @@
         <item>Doctorate</item>
         <item>Other</item>
     </string-array>
+    <string name="selectOption">Select an option (↓)</string>
+    <string name="next">Next</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="name">Name: </string>
+    <string name="surname">Surname: </string>
+    <string name="sex">Sex: </string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="dob">Date of birth: </string>
+    <string name="selectDate">Select a Date</string>
+    <string name="education">Education degree: </string>
+    <string name="sexNotGiven">Unknown</string>
+
+    <string name="nameError">Name is required!</string>
+    <string name="surnameError">Surname is required!</string>
+    <string name="dateError">Date of birth is required!</string>
+    <string name="dateValidError">Date of birth is invalid!</string>
+
+    <string name="phone">Phone: </string>
+    <string name="address">Address: </string>
+    <string name="email">Email: </string>
+    <string name="country">Country: </string>
+    <string name="city">City: </string>
+
+    <string name="phoneError">Phone is required!</string>
+    <string name="emailError">Email is required!</string>
+    <string name="emailValidError">Email is invalid!</string>
+    <string name="countryError">Country is required!</string>
 </resources>
