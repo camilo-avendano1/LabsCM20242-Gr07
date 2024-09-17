@@ -7,6 +7,8 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,10 +19,16 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -46,6 +54,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -156,16 +165,24 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                         .weight(1f)
                         .padding(4.dp)) {
                         Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
-                        TextField(
-                            value = nameText,
-                            onValueChange = { nameText = it },
-                            modifier = Modifier.fillMaxWidth(),
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Next,
-                                capitalization = KeyboardCapitalization.Words
-                            ),
-                            isError = nameError
-                        )
+
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = resources.getString(R.string.name),
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            TextField(
+                                value = nameText,
+                                onValueChange = { nameText = it },
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Next,
+                                    capitalization = KeyboardCapitalization.Words
+                                ),
+                                isError = nameError
+                            )
+                        }
                         if (nameError) {
                             Text(resources.getString(R.string.nameError), color = MaterialTheme.colorScheme.error)
                         }
@@ -176,16 +193,24 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                         .weight(1f)
                         .padding(4.dp)) {
                         Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
-                        TextField(
-                            value = surnameText,
-                            onValueChange = { surnameText = it },
-                            modifier = Modifier.fillMaxWidth(),
-                            keyboardOptions = KeyboardOptions.Default.copy(
-                                imeAction = ImeAction.Done,
-                                capitalization = KeyboardCapitalization.Words
-                            ),
-                            isError = surnameError
-                        )
+
+                        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Filled.AccountBox,
+                                contentDescription = resources.getString(R.string.name),
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                            TextField(
+                                value = surnameText,
+                                onValueChange = { surnameText = it },
+                                modifier = Modifier.fillMaxWidth(),
+                                keyboardOptions = KeyboardOptions.Default.copy(
+                                    imeAction = ImeAction.Done,
+                                    capitalization = KeyboardCapitalization.Words
+                                ),
+                                isError = surnameError
+                            )
+                        }
                         if (surnameError) {
                             Text(resources.getString(R.string.surnameError), color = MaterialTheme.colorScheme.error)
                         }
@@ -194,35 +219,51 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
             } else {
                 // Vertical (uno debajo del otro)
                 Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
-                TextField(
-                    value = nameText,
-                    onValueChange = { nameText = it },
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Next,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                    isError = nameError
-                )
+
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = resources.getString(R.string.name),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    TextField(
+                        value = nameText,
+                        onValueChange = { nameText = it },
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Next,
+                            capitalization = KeyboardCapitalization.Words
+                        ),
+                        isError = nameError
+                    )
+                }
                 if (nameError) {
                     Text(resources.getString(R.string.nameError), color = MaterialTheme.colorScheme.error)
                 }
 
                 Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
-                TextField(
-                    value = surnameText,
-                    onValueChange = { surnameText = it },
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done,
-                        capitalization = KeyboardCapitalization.Words
-                    ),
-                    isError = surnameError
-                )
+
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountBox,
+                        contentDescription = resources.getString(R.string.name),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    TextField(
+                        value = surnameText,
+                        onValueChange = { surnameText = it },
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                            capitalization = KeyboardCapitalization.Words
+                        ),
+                        isError = surnameError
+                    )
+                }
                 if (surnameError) {
                     Text(resources.getString(R.string.surnameError), color = MaterialTheme.colorScheme.error)
                 }
@@ -230,36 +271,64 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
 
             // Campos adicionales como Sexo, Fecha de Nacimiento, etc.
             Row {
-                Text(text = resources.getString(R.string.sex), modifier = Modifier
-                    .padding(4.dp, end = 8.dp)
-                    .align(Alignment.CenterVertically))
+                // Icono para la palabra "Sexo"
+                Icon(
+                    imageVector = Icons.Filled.FavoriteBorder, // Puedes cambiarlo por otro ícono que represente "sexo"
+                    contentDescription = resources.getString(R.string.sex),
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .align(Alignment.CenterVertically)
+                )
+
+                // Texto para "Sexo"
+                Text(
+                    text = resources.getString(R.string.sex),
+                    modifier = Modifier
+                        .padding(4.dp, end = 8.dp)
+                        .align(Alignment.CenterVertically)
+                )
+            }
+
+            Row {
+                // Texto para género masculino
                 Text(
                     text = resources.getString(R.string.male),
                     modifier = Modifier
-                        .padding(4.dp, end = 1.dp)
+                        .padding(4.dp, end = 8.dp)
                         .align(Alignment.CenterVertically)
                 )
+
+                // RadioButton para masculino
                 RadioButton(
                     selected = mRadioButtonSelected,
                     onClick = {
-                        fRadioButtonSelected = false; mRadioButtonSelected = true
+                        fRadioButtonSelected = false
+                        mRadioButtonSelected = true
                     },
                     modifier = Modifier.padding(4.dp)
                 )
+
+                // Texto para género femenino
                 Text(
                     text = resources.getString(R.string.female),
                     modifier = Modifier
-                        .padding(4.dp, end = 1.dp)
+                        .padding(4.dp, end = 8.dp)
                         .align(Alignment.CenterVertically)
                 )
+
+                // RadioButton para femenino
                 RadioButton(
                     selected = fRadioButtonSelected,
                     onClick = {
-                        fRadioButtonSelected = true; mRadioButtonSelected = false
+                        fRadioButtonSelected = true
+                        mRadioButtonSelected = false
                     },
                     modifier = Modifier.padding(4.dp)
                 )
             }
+
+
+
 
             Row {
                 Text(text = resources.getString(R.string.dob),
@@ -284,9 +353,11 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                 Text(resources.getString(R.string.dateValidError), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
             }
 
-            // Spinner en Jetpack Compose usando DropdownMenu
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(text = resources.getString(R.string.education), modifier = Modifier.padding(4.dp))
+                Text(
+                    text = resources.getString(R.string.education),
+                    modifier = Modifier.padding(4.dp)
+                )
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -299,6 +370,9 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                             .fillMaxWidth()
                             .wrapContentSize(Alignment.CenterStart)
                             .clickable { expandedDropDown = !expandedDropDown }
+                            .border(1.dp, Color.Gray, shape = RoundedCornerShape(4.dp)) // Añadir borde
+                            .background(Color.White) // Fondo blanco para el texto
+                            .padding(8.dp) // Añadir relleno para un área clicable más grande
                     )
                     DropdownMenu(
                         expanded = expandedDropDown,
@@ -317,6 +391,10 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     }
                 }
             }
+
+
+
+
         }
 
         Button(
@@ -324,8 +402,12 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                 nameError = nameText.isEmpty()
                 surnameError = surnameText.isEmpty()
                 dateError = dateSelected.isEmpty()
-                futureDateError = if(dateError){ true } else {dateLong!! > System.currentTimeMillis()}
-                if(!nameError && !surnameError && !dateError && !futureDateError){
+                futureDateError = if (dateError) {
+                    true
+                } else {
+                    dateLong!! > System.currentTimeMillis()
+                }
+                if (!nameError && !surnameError && !dateError && !futureDateError) {
                     sex = if (mRadioButtonSelected)
                         (resources.getString(R.string.male))
                     else if (fRadioButtonSelected)
@@ -333,20 +415,21 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     else
                         (resources.getString(R.string.sexNotGiven))
 
-                    Log.d("PersonalData",
+                    Log.d(
+                        "PersonalData",
                         "Name: $nameText, \n" +
                                 "Surname: $surnameText,\n" +
                                 "Sex: $sex, \n" +
                                 "DoB: $dateSelected, \n" +
                                 "Education degree: $dropDownSelected"
                     )
-
                     nextButton()
                 }
             },
             modifier = Modifier
-                .padding(4.dp)
-                .align(Alignment.BottomEnd)
+                .padding(8.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
         ) {
             Text(text = resources.getString(R.string.next))
         }
@@ -363,6 +446,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
         )
     }
 }
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
