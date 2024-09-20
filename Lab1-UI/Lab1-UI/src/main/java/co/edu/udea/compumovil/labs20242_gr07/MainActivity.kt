@@ -155,7 +155,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
         modifier = Modifier
             .padding(top = 20.dp)
             .then (if (isLandscape)
-                Modifier.padding(top=20.dp,bottom = 50.dp, start = 50.dp, end= 50.dp)
+                Modifier.padding(top=20.dp,bottom = 10.dp, start = 50.dp, end= 50.dp)
             else Modifier.padding(top=20.dp, start=20.dp, end=20.dp))
             .fillMaxSize()
     ) {
@@ -440,7 +440,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                 Text(resources.getString(R.string.dateValidError), color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 8.dp))
             }
 
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(modifier = Modifier.fillMaxSize()) {
                 Text(
                     text = resources.getString(R.string.education),
                     fontWeight = FontWeight.Bold,
@@ -480,50 +480,51 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     }
                 }
             }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(30.dp)
-            ){
-                    Button(
-                        onClick = {
-                            nameError = nameText.isEmpty()
-                            surnameError = surnameText.isEmpty()
-                            dateError = dateSelected.isEmpty()
-                            futureDateError = if (dateError) {
-                                true
-                            } else {
-                                dateLong!! > System.currentTimeMillis()
-                            }
-                            if (!nameError && !surnameError && !dateError && !futureDateError) {
-                                sex = if (mRadioButtonSelected)
-                                    (resources.getString(R.string.male))
-                                else if (fRadioButtonSelected)
-                                    (resources.getString(R.string.female))
-                                else
-                                    (resources.getString(R.string.sexNotGiven))
-
-                                Log.d(
-                                    "PersonalData",
-                                    "Name: $nameText, \n" +
-                                            "Surname: $surnameText,\n" +
-                                            "Sex: $sex, \n" +
-                                            "DoB: $dateSelected, \n" +
-                                            "Education degree: $dropDownSelected"
-                                )
-                                nextButton()
-                            }
-                        },
-                        modifier = if (isLandscape) {
-                            Modifier.align(Alignment.TopEnd) // En landscape, lo coloca en la parte superior derecha
-                        } else {
-                            Modifier.align(Alignment.BottomCenter) // En portrait, lo coloca al fondo y centrado
-                        }
-                    ) {
-                        Text(
-                            text = resources.getString(R.string.next),
-                            modifier = Modifier.padding(start = 30.dp, end=30.dp))
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(30.dp)
+        ){
+            Button(
+                onClick = {
+                    nameError = nameText.isEmpty()
+                    surnameError = surnameText.isEmpty()
+                    dateError = dateSelected.isEmpty()
+                    futureDateError = if (dateError) {
+                        true
+                    } else {
+                        dateLong!! > System.currentTimeMillis()
                     }
+                    if (!nameError && !surnameError && !dateError && !futureDateError) {
+                        sex = if (mRadioButtonSelected)
+                            (resources.getString(R.string.male))
+                        else if (fRadioButtonSelected)
+                            (resources.getString(R.string.female))
+                        else
+                            (resources.getString(R.string.sexNotGiven))
+
+                        Log.d(
+                            "PersonalData",
+                            "Name: $nameText, \n" +
+                                    "Surname: $surnameText,\n" +
+                                    "Sex: $sex, \n" +
+                                    "DoB: $dateSelected, \n" +
+                                    "Education degree: $dropDownSelected"
+                        )
+                        nextButton()
+                    }
+                },
+                modifier = Modifier.then(if (isLandscape) {
+                    Modifier.align(Alignment.BottomEnd)
+                } else {
+                    Modifier.align(Alignment.BottomCenter).fillMaxWidth()
+                })
+                    .padding(bottom= 10.dp)
+            ) {
+                Text(
+                    text = resources.getString(R.string.next),
+                    modifier = Modifier.padding(start = 30.dp, end=30.dp))
             }
         }
     }
@@ -539,9 +540,6 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
         )
     }
 }
-
-
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
