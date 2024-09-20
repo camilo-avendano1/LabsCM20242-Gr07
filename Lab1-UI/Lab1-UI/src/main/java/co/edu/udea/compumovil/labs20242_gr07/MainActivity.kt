@@ -10,9 +10,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -56,11 +58,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import co.edu.udea.compumovil.labs20242_gr07.ui.theme.Labs20242Gr07Theme
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -149,22 +153,28 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
 
     Box(
         modifier = Modifier
+            .padding(top = 20.dp)
+            .then (if (isLandscape)
+                Modifier.padding(top=20.dp,bottom = 50.dp, start = 50.dp, end= 50.dp)
+            else Modifier.padding(top=20.dp, start=20.dp, end=20.dp))
             .fillMaxSize()
-            .padding(top = 28.dp, bottom = 42.dp, start = 4.dp, end = 4.dp)
     ) {
         Column(
             modifier = Modifier
-                .padding(4.dp)
                 .verticalScroll(scrollState)
         ) {
-            // Campos de Nombre y Apellido
+            Text(text = "Información Personal",
+                modifier = Modifier.padding(bottom = 10.dp),
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold)
+            // Campos de Nombre y Apellido.
             if (isLandscape) {
                 Row(modifier = Modifier.fillMaxWidth()) {
                     // Campo Nombre
                     Column(modifier = Modifier
-                        .weight(1f)
+                        .weight(0.7f)
                         .padding(4.dp)) {
-                        Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
+                        //Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
 
                         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -174,6 +184,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                             )
                             TextField(
                                 value = nameText,
+                                placeholder = { Text(text = "Name") },
                                 onValueChange = { nameText = it },
                                 modifier = Modifier.fillMaxWidth(),
                                 keyboardOptions = KeyboardOptions.Default.copy(
@@ -190,9 +201,9 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
 
                     // Campo Apellido
                     Column(modifier = Modifier
-                        .weight(1f)
+                        .weight(0.7f)
                         .padding(4.dp)) {
-                        Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
+                        //Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
 
                         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                             Icon(
@@ -201,6 +212,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                                 modifier = Modifier.padding(end = 8.dp)
                             )
                             TextField(
+                                placeholder = { Text(text = "Surname") },
                                 value = surnameText,
                                 onValueChange = { surnameText = it },
                                 modifier = Modifier.fillMaxWidth(),
@@ -218,7 +230,6 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                 }
             } else {
                 // Vertical (uno debajo del otro)
-                Text(text = resources.getString(R.string.name), modifier = Modifier.padding(4.dp))
 
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -228,6 +239,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     )
                     TextField(
                         value = nameText,
+                        placeholder = { Text(text = "Name") },
                         onValueChange = { nameText = it },
                         modifier = Modifier
                             .padding(4.dp)
@@ -243,8 +255,6 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     Text(resources.getString(R.string.nameError), color = MaterialTheme.colorScheme.error)
                 }
 
-                Text(text = resources.getString(R.string.surname), modifier = Modifier.padding(4.dp))
-
                 Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         imageVector = Icons.Filled.AccountBox,
@@ -253,6 +263,7 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     )
                     TextField(
                         value = surnameText,
+                        placeholder = { Text(text = "Surname") },
                         onValueChange = { surnameText = it },
                         modifier = Modifier
                             .padding(4.dp)
@@ -270,81 +281,157 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
             }
 
             // Campos adicionales como Sexo, Fecha de Nacimiento, etc.
-            Row {
-                // Icono para la palabra "Sexo"
-                Icon(
-                    imageVector = Icons.Filled.FavoriteBorder, // Puedes cambiarlo por otro ícono que represente "sexo"
-                    contentDescription = resources.getString(R.string.sex),
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .align(Alignment.CenterVertically)
-                )
+            if(isLandscape){
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(top=10.dp),
+                    horizontalArrangement = Arrangement.Center
+                ){
+                    Column(){
+                        Row {
+                            // Icono para la palabra "Sexo"
+                            Icon(
+                                imageVector = Icons.Filled.FavoriteBorder, // Puedes cambiarlo por otro ícono que represente "sexo"
+                                contentDescription = resources.getString(R.string.sex),
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
+                            // Texto para "Sexo"
+                            Text(
+                                text = resources.getString(R.string.sex),
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .padding(4.dp, end = 30.dp)
+                                    .align(Alignment.CenterVertically)
+                            )
 
-                // Texto para "Sexo"
-                Text(
-                    text = resources.getString(R.string.sex),
-                    modifier = Modifier
-                        .padding(4.dp, end = 8.dp)
-                        .align(Alignment.CenterVertically)
-                )
-            }
+                            Text(
+                                text = resources.getString(R.string.male),
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                            )
 
-            Row {
-                // Texto para género masculino
-                Text(
-                    text = resources.getString(R.string.male),
-                    modifier = Modifier
-                        .padding(4.dp, end = 8.dp)
-                        .align(Alignment.CenterVertically)
-                )
+                            // RadioButton para masculino
+                            RadioButton(
+                                selected = mRadioButtonSelected,
+                                onClick = {
+                                    fRadioButtonSelected = false
+                                    mRadioButtonSelected = true
+                                },
+                            )
 
-                // RadioButton para masculino
-                RadioButton(
-                    selected = mRadioButtonSelected,
-                    onClick = {
-                        fRadioButtonSelected = false
-                        mRadioButtonSelected = true
-                    },
-                    modifier = Modifier.padding(4.dp)
-                )
+                            // Texto para género femenino
+                            Text(
+                                text = resources.getString(R.string.female),
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                            )
 
-                // Texto para género femenino
-                Text(
-                    text = resources.getString(R.string.female),
-                    modifier = Modifier
-                        .padding(4.dp, end = 8.dp)
-                        .align(Alignment.CenterVertically)
-                )
+                            // RadioButton para femenino
+                            RadioButton(
+                                selected = fRadioButtonSelected,
+                                onClick = {
+                                    fRadioButtonSelected = true
+                                    mRadioButtonSelected = false
+                                },
+                            )
+                        }
 
-                // RadioButton para femenino
-                RadioButton(
-                    selected = fRadioButtonSelected,
-                    onClick = {
-                        fRadioButtonSelected = true
-                        mRadioButtonSelected = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                )
-            }
-
-
-
-
-            Row {
-                Text(text = resources.getString(R.string.dob),
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .align(Alignment.CenterVertically)
-                )
-                IconButton(
-                    onClick = { showDatePicker = true },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = resources.getString(R.string.selectDate))
+                        Row {
+                            Text(text = resources.getString(R.string.dob),
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier
+                                    .align(Alignment.CenterVertically)
+                            )
+                            IconButton(
+                                onClick = { showDatePicker = true },
+                            ) {
+                                Icon(imageVector = Icons.Filled.DateRange, contentDescription = resources.getString(R.string.selectDate))
+                            }
+                            Text(text = dateSelected, modifier = Modifier
+                                .align(Alignment.CenterVertically))
+                        }
+                    }
+                    }
                 }
-                Text(text = dateSelected, modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.CenterVertically))
+            else{
+                Row (
+                    modifier = Modifier.fillMaxWidth().padding(top=20.dp),
+                ){
+                    // Icono para la palabra "Sexo"
+                    Icon(
+                        imageVector = Icons.Filled.FavoriteBorder, // Puedes cambiarlo por otro ícono que represente "sexo"
+                        contentDescription = resources.getString(R.string.sex),
+                        modifier = Modifier
+                            .padding(end = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+
+                    // Texto para "Sexo"
+                    Text(
+                        text = resources.getString(R.string.sex),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(4.dp, end = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                }
+
+                Row {
+                    // Texto para género masculino
+                    Text(
+                        text = resources.getString(R.string.male),
+                        modifier = Modifier
+                            .padding(4.dp, end = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+
+                    // RadioButton para masculino
+                    RadioButton(
+                        selected = mRadioButtonSelected,
+                        onClick = {
+                            fRadioButtonSelected = false
+                            mRadioButtonSelected = true
+                        },
+                        modifier = Modifier.padding(4.dp)
+                    )
+
+                    // Texto para género femenino
+                    Text(
+                        text = resources.getString(R.string.female),
+                        modifier = Modifier
+                            .padding(4.dp, end = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+
+                    // RadioButton para femenino
+                    RadioButton(
+                        selected = fRadioButtonSelected,
+                        onClick = {
+                            fRadioButtonSelected = true
+                            mRadioButtonSelected = false
+                        },
+                        modifier = Modifier.padding(4.dp)
+                    )
+                }
+
+                Row {
+                    Text(text = resources.getString(R.string.dob),
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+                    IconButton(
+                        onClick = { showDatePicker = true },
+                        modifier = Modifier.padding(4.dp)
+                    ) {
+                        Icon(imageVector = Icons.Filled.DateRange, contentDescription = resources.getString(R.string.selectDate))
+                    }
+                    Text(text = dateSelected, modifier = Modifier
+                        .padding(4.dp)
+                        .align(Alignment.CenterVertically))
+                }
             }
 
             if (dateError) {
@@ -356,7 +443,9 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = resources.getString(R.string.education),
-                    modifier = Modifier.padding(4.dp)
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(4.dp).align(Alignment.CenterVertically)
+
                 )
                 Box(
                     modifier = Modifier
@@ -391,47 +480,51 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
                     }
                 }
             }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(30.dp)
+            ){
+                    Button(
+                        onClick = {
+                            nameError = nameText.isEmpty()
+                            surnameError = surnameText.isEmpty()
+                            dateError = dateSelected.isEmpty()
+                            futureDateError = if (dateError) {
+                                true
+                            } else {
+                                dateLong!! > System.currentTimeMillis()
+                            }
+                            if (!nameError && !surnameError && !dateError && !futureDateError) {
+                                sex = if (mRadioButtonSelected)
+                                    (resources.getString(R.string.male))
+                                else if (fRadioButtonSelected)
+                                    (resources.getString(R.string.female))
+                                else
+                                    (resources.getString(R.string.sexNotGiven))
 
-
-
-
-        }
-
-        Button(
-            onClick = {
-                nameError = nameText.isEmpty()
-                surnameError = surnameText.isEmpty()
-                dateError = dateSelected.isEmpty()
-                futureDateError = if (dateError) {
-                    true
-                } else {
-                    dateLong!! > System.currentTimeMillis()
-                }
-                if (!nameError && !surnameError && !dateError && !futureDateError) {
-                    sex = if (mRadioButtonSelected)
-                        (resources.getString(R.string.male))
-                    else if (fRadioButtonSelected)
-                        (resources.getString(R.string.female))
-                    else
-                        (resources.getString(R.string.sexNotGiven))
-
-                    Log.d(
-                        "PersonalData",
-                        "Name: $nameText, \n" +
-                                "Surname: $surnameText,\n" +
-                                "Sex: $sex, \n" +
-                                "DoB: $dateSelected, \n" +
-                                "Education degree: $dropDownSelected"
-                    )
-                    nextButton()
-                }
-            },
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        ) {
-            Text(text = resources.getString(R.string.next))
+                                Log.d(
+                                    "PersonalData",
+                                    "Name: $nameText, \n" +
+                                            "Surname: $surnameText,\n" +
+                                            "Sex: $sex, \n" +
+                                            "DoB: $dateSelected, \n" +
+                                            "Education degree: $dropDownSelected"
+                                )
+                                nextButton()
+                            }
+                        },
+                        modifier = if (isLandscape) {
+                            Modifier.align(Alignment.TopEnd) // En landscape, lo coloca en la parte superior derecha
+                        } else {
+                            Modifier.align(Alignment.BottomCenter) // En portrait, lo coloca al fondo y centrado
+                        }
+                    ) {
+                        Text(
+                            text = resources.getString(R.string.next),
+                            modifier = Modifier.padding(start = 30.dp, end=30.dp))
+                    }
+            }
         }
     }
 
@@ -446,6 +539,8 @@ fun PersonalData(resources: Resources, arrayItems: Array<String>, nextButton: ()
         )
     }
 }
+
+
 
 
 
